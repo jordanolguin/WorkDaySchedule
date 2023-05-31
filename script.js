@@ -19,40 +19,41 @@
 // attribute of each time-block be used to do this?
 //
 // TODO: Add code to display the current date in the header of the page.
-var today = dayjs();
-$("#currentDay").text(today.format("dddd, MMM D"));
 
-var saveButton = $(".saveBtn");
-saveButton.on("click", function (event) {
-  event.preventDefault();
-  // console.log(this);
-  var hourContainer = $(this).parent().attr("id");
-  // console.log(hourContainer);
-  var todoItem = $(this).siblings(".description").val();
-  localStorage.setItem(hourContainer, todoItem);
-  // console.log(todoItem);
+$(function () {
+  var today = dayjs();
+  $("#currentDay").text(today.format("dddd, MMM D"));
+
+  var saveButton = $(".saveBtn");
+  saveButton.on("click", function (event) {
+    event.preventDefault();
+    // console.log(this);
+    var hourContainer = $(this).parent().attr("id");
+    // console.log(hourContainer);
+    var todoItem = $(this).siblings(".description").val();
+    localStorage.setItem(hourContainer, todoItem);
+    // console.log(todoItem);
+  });
+
+  var currentTime = today.hour();
+
+  $(".time-block").each(function () {
+    var hourId = parseInt($(this).attr("id").split("-")[1]);
+    // console.log(hourId);
+    if (hourId < currentTime) {
+      $(this).addClass("past");
+      $(this).removeClass("present future");
+    } else if (hourId === currentTime) {
+      $(this).addClass("present");
+      $(this).removeClass("past future");
+    } else {
+      $(this).addClass("future");
+      $(this).removeClass("past present");
+    }
+  });
+
+  $(".time-block").each(function () {
+    var hourId = $(this).attr("id");
+    $(this).children("textarea").val(localStorage.getItem(hourId));
+  });
 });
-
-var currentTime = today.hour();
-
-$(".time-block").each(function () {
-  var hourId = parseInt($(this).attr("id").split("-")[1]);
-  // console.log(hourId);
-  if (hourId < currentTime) {
-    $(this).addClass("past");
-    $(this).removeClass("present future");
-  } else if (hourId === currentTime) {
-    $(this).addClass("present");
-    $(this).removeClass("past future");
-  } else {
-    $(this).addClass("future");
-    $(this).removeClass("past present");
-  }
-});
-
-$(".time-block").each(function () {
-  var hourId = $(this).attr("id");
-  $(this).children("textarea").val(localStorage.getItem(hourId));
-});
-
-$(function () {});
