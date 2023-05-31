@@ -32,3 +32,27 @@ saveButton.on("click", function (event) {
   localStorage.setItem(hourContainer, todoItem);
   // console.log(todoItem);
 });
+
+var currentTime = today.hour();
+
+$(".time-block").each(function () {
+  var hourId = parseInt($(this).attr("id").split("-")[1]);
+  // console.log(hourId);
+  if (hourId < currentTime) {
+    $(this).addClass("past");
+    $(this).removeClass("present future");
+  } else if (hourId === currentTime) {
+    $(this).addClass("present");
+    $(this).removeClass("past future");
+  } else {
+    $(this).addClass("future");
+    $(this).removeClass("past present");
+  }
+});
+
+$(".time-block").each(function () {
+  var hourId = $(this).attr("id");
+  $(this).children("textarea").val(localStorage.getItem(hourId));
+});
+
+$(function () {});
